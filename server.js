@@ -94,7 +94,7 @@ async.series([
   },
     (next) => {
       restserver.listen(PORT, () => {
-        log.info(REST,"REST server running on https://localhost:" + PORT + restURI);
+        log.info(REST,"REST server running on http://localhost:" + PORT + restURI);
         next(null);
       });
     }
@@ -107,5 +107,5 @@ async.series([
 
 restapp.post(restURI, (req,res) => {
   res.status(204).send();
-  serverSSL.sockets.emit(NAMESPACE, req.body);
+  wssServer.sockets.emit(NAMESPACE, req.body);
 });
