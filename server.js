@@ -43,8 +43,8 @@ var restapp       = express()
 
 const pingInterval = 25000
     , pingTimeout  = 60000
-    , PORT = 11200
-    , WSSPORT = 11111
+    , PORT = 50001
+    , WSSPORT = 50443
     , NAMESPACE = "message"
     , REST  = "REST"
     , WS    = "WS"
