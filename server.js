@@ -51,8 +51,8 @@ const pingInterval = 25000
     , ERROR = "ERROR"
 ;
 
-//const SSLPATH = '/u01/ssl';
-const SSLPATH = '/Users/ccasares/Documents/Oracle/Presales/Initiatives/Wedo/setup/wedoteam.io.certificate/2020';
+const SSLPATH = '/u01/ssl';
+//const SSLPATH = '/Users/ccasares/Documents/Oracle/Presales/Initiatives/Wedo/setup/wedoteam.io.certificate/2020';
 
 const optionsSSL = {
   cert: fs.readFileSync(SSLPATH + "/certificate.fullchain.crt").toString(),
