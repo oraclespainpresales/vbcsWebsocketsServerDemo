@@ -36,7 +36,7 @@ log.level = 'verbose';
 
 // Instantiate classes & servers
 const wsURI       = '/socket.io'
-    , restURI     = '/event/:eventname';
+    , restURI     = '/message';
 var restapp       = express()
   , restserver    = http.createServer(restapp)
 ;
