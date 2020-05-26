@@ -11,26 +11,25 @@ var express = require('express')
   , cors = require('cors')
 ;
 
-// ************************************************************************
-// Main code STARTS HERE !!
-// ************************************************************************
-
 log.stream = process.stdout;
 log.timestamp = true;
 
-// Main handlers registration - BEGIN
-// Main error handler
+const REST  = "REST"
+    , WS    = "WS"
+    , ERROR = "ERROR"
+;
+
+// Main error handlers
 process.on('uncaughtException', function (err) {
-  log.info("","Uncaught Exception: " + err);
-  log.info("","Uncaught Exception: " + err.stack);
+  log.info(ERROR,"Uncaught Exception: " + err);
+  log.info(ERROR,"Uncaught Exception: " + err.stack);
 });
 // Detect CTRL-C
 process.on('SIGINT', function() {
-  log.info("","Caught interrupt signal");
-  log.info("","Exiting gracefully");
+  log.info(ERROR,"Caught interrupt signal");
+  log.info(ERROR,"Exiting gracefully");
   process.exit(2);
 });
-// Main handlers registration - END
 
 log.level = 'verbose';
 
@@ -46,9 +45,6 @@ const pingInterval = 25000
     , PORT = 50001
     , WSSPORT = 50443
     , NAMESPACE = "message"
-    , REST  = "REST"
-    , WS    = "WS"
-    , ERROR = "ERROR"
 ;
 
 const SSLPATH = '/u01/ssl';
@@ -77,7 +73,7 @@ async.series([
           log.verbose(WS,'heartbeat');
         });
         socket.on(NAMESPACE, data => {
-          log.info(WS,"Message received: " + data);
+          log.info(WS,`Message received: ${JSON.stringify(data)}`);
         });
         socket.on('disconnect', () => {
           log.info(WS,"Socket disconnected");
@@ -88,13 +84,13 @@ async.series([
       };
       wssServer.on('connection', f_connection);
       serverSSL.listen(WSSPORT, () => {
-        log.info(WS,"Created WSS server at port: " + WSSPORT);
+        log.info(WS,`Created WSS server at port: ${WSSPORT}`);
         next(null);  
       });
   },
     (next) => {
       restserver.listen(PORT, () => {
-        log.info(REST,"REST server running on http://localhost:" + PORT + restURI);
+        log.info(REST,`REST server running on http://localhost:${PORT}${restURI}`);
         next(null);
       });
     }
@@ -107,5 +103,6 @@ async.series([
 
 restapp.post(restURI, (req,res) => {
   res.status(204).send();
+  log.info(REST, `Forwarding message to all WS clients: ${JSON.stringify(req.body)}`)
   wssServer.sockets.emit(NAMESPACE, req.body);
 });
