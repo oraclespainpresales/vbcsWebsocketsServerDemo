@@ -103,6 +103,6 @@ async.series([
 
 restapp.post(restURI, (req,res) => {
   res.status(204).send();
-  log.info(REST, `Forwarding message to all WS clients: ${JSON.stringify(req.body)}`)
+  log.info(REST, `Forwarding message to all WS clients: ${JSON.stringify(req.body)}`);
   wssServer.sockets.emit(NAMESPACE, req.body);
 });
